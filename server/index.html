@@ -1,53 +1,11 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="UTF-8" />
-  <title>TPC: Server</title>
-</head>
-
-<body>
-  <h1>Привіт з Electron та Bun!</h1>
-
-  <button id="lock-btn">Lock</button>
-  <script defer>
-    const lockBtn = document.getElementById('lock-btn');
-    lockBtn.addEventListener('click', () => {
-      window.electronAPI.sendMessage({
-        type: "lock",
-      });
-    });
-  </script>
-
-  <button id="unlock-btn">Unlock</button>
-  <script defer>
-    const unlockBtn = document.getElementById('unlock-btn');
-    unlockBtn.addEventListener('click', () => {
-      window.electronAPI.sendMessage({
-        type: "unlock",
-      });
-    });
-  </script>
-
-  <button id="btn">Надіслати повідомлення в Main</button>
-  <p id="response"></p>
-
-
-
-  <script defer>
-    const button = document.getElementById('btn');
-    const responseText = document.getElementById('response');
-
-    // Викликаємо функцію з нашого безпечного містка
-    button.addEventListener('click', () => {
-      window.electronAPI.sendMessage('Привіт з рендерера!');
-    });
-
-    // Слухаємо відповідь від головного процесу
-    window.electronAPI.onReceiveMessage((message) => {
-      responseText.innerText = message;
-    });
-  </script>
-</body>
-
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TPC: Server</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/app/main.tsx"></script>
+  </body>
 </html>

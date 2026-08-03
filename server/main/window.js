@@ -5,9 +5,11 @@ import { windowMessageHandler } from './window-messages/index.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
+let w
+
 export const Window = {
     create: () => {
-        const w = new BrowserWindow({
+        w = new BrowserWindow({
             width: 800,
             height: 600,
             webPreferences: {
@@ -16,7 +18,13 @@ export const Window = {
         });
 
         w.setMenuBarVisibility(false);
-        w.loadFile('index.html');
+
+        if (process.env.NODE_ENV === 'development') {
+            w.loadURL('http://localhost:5173');
+            w.webContents.openDevTools();
+        } else {
+            w.loadFile(path.join(__dirname, 'dist/index.html'));
+        }
 
         ipcMain.on('to-main', (event, msg) => {
             windowMessageHandler(msg)
