@@ -1,0 +1,23 @@
+{
+  "name": "client",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "electron": "^43.2.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "bonjour-service": "^1.4.4",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "get-installed-apps": "^1.1.1",
+    "socket.io": "^4.8.3"
+  }
+}

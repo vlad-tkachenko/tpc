@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>TPC: Client</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+</head>
+
+<body class="bg-light">
+    <div class="container my-5">
+        <h1>Привіт з Electron та Bun!</h1>
+        <button id="btn">Надіслати повідомлення в Main</button>
+        <p id="response"></p>
+    </div>
+
+    <script defer>
+        const button = document.getElementById('btn');
+        const responseText = document.getElementById('response');
+
+        // Викликаємо функцію з нашого безпечного містка
+        button.addEventListener('click', () => {
+            window.electronAPI.sendMessage('Привіт з рендерера!');
+        });
+
+        // Слухаємо відповідь від головного процесу
+        window.electronAPI.onReceiveMessage((message) => {
+            responseText.innerText = message;
+        });
+    </script>
+</body>
+
+</html>

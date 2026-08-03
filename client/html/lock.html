@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>TPC: Client</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
+</head>
+
+<body class="bg-light">
+    <div class="container my-5">
+        <div class="d-flex">
+            <div class="flex-fill"></div>
+            <div class="align-self-center">
+                <i id="bulb-danger" class="bi bi-lightbulb-fill text-danger" style="font-size: 20rem"></i>
+                <i id="bulb-warn" class="bi bi-lightbulb-fill text-warning" style="font-size: 20rem; display: none;"></i>
+            </div>
+            <div class="flex-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        const bulbD = document.getElementById('bulb-danger')
+        const bulbW = document.getElementById('bulb-warn')
+
+        setInterval(() => {
+            if (bulbD.style.display === 'none') {
+                bulbD.style.display = 'block'
+                bulbW.style.display = 'none'
+            } else {
+                bulbD.style.display = 'none'
+                bulbW.style.display = 'block'
+            }
+        }, 1000)
+    </script>
+</body>
+
+</html>
