@@ -3,8 +3,7 @@ import { Server as SocketIOServer } from "socket.io";
 import { Bonjour } from "bonjour-service";
 import { Window } from "./window.js";
 
-const INSTANCE = process.argv[2]
-const SERVER_NAME = process.env.INSTANCE_NAME || `tpc-client-${INSTANCE || 0}`;
+const SERVER_NAME = process.env.TPC_CLIENT_NAME || `tpc-client`;
 
 const httpServer = createServer();
 const io = new SocketIOServer(httpServer, {
