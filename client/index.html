@@ -19,12 +19,10 @@
         const button = document.getElementById('btn');
         const responseText = document.getElementById('response');
 
-        // Викликаємо функцію з нашого безпечного містка
         button.addEventListener('click', () => {
             window.electronAPI.sendMessage('Привіт з рендерера!');
         });
 
-        // Слухаємо відповідь від головного процесу
         window.electronAPI.onReceiveMessage((message) => {
             responseText.innerText = message;
         });

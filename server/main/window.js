@@ -2,12 +2,40 @@ import { BrowserWindow, ipcMain } from 'electron';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { windowMessageHandler } from './window-messages/index.js';
+import { randomUUID } from 'node:crypto';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 let w
 
 export const Window = {
+    event: (type, data) => {
+        w?.webContents.send('from-main', {
+            id: randomUUID(),
+            ok: true,
+            type,
+            data,
+        });
+    },
+
+    send: {
+        error: (id, error) => {
+            w?.webContents.send('from-main', {
+                id,
+                ok: false,
+                error,
+            });
+        },
+
+        ok: (id, data) => {
+            w?.webContents.send('from-main', {
+                id,
+                ok: true,
+                data,
+            });
+        },
+    },
+
     create: () => {
         w = new BrowserWindow({
             width: 800,

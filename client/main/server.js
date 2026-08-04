@@ -2,8 +2,9 @@ import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { Bonjour } from "bonjour-service";
 import { Window } from "./window.js";
+import { eventHandler } from "../events/eventHandler.js";
 
-const SERVER_NAME = process.env.TPC_CLIENT_NAME || `tpc-client`;
+const SERVER_NAME = process.env.TPC_CLIENT_NAME || `tpc-client-${Date.now()}`;
 
 const httpServer = createServer();
 const io = new SocketIOServer(httpServer, {
@@ -15,19 +16,8 @@ const bonjour = new Bonjour();
 io.on("connection", (socket) => {
     console.log(`[${SERVER_NAME}] Client connected: ${socket.id}`);
 
-    socket.on("unlock", () => {
-        Window.close()
-    })
-    
-    socket.on("lock", () => {
-        Window.show("html/lock.html", {
-            fullscreen: true,
-            locked: true,
-        })
-    })
-
-    socket.on("ping-server", (data) => {
-        socket.emit("pong-client", { from: SERVER_NAME, received: data });
+    socket.onAny((event, ...args) => {
+        eventHandler(socket, event, ...args)
     });
 });
 

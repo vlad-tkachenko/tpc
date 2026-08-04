@@ -1,13 +1,20 @@
 import { Bonjour } from "bonjour-service";
 import { io } from "socket.io-client";
+import { Window } from "./window.js";
+import { EventListeners } from "./EventListeners.js";
 
 const bonjour = new Bonjour();
 // Stores { serviceKey: { socket, service } }
-const activeConnections = new Map(); 
+const activeConnections = new Map();
 let browser;
 
 const RESCAN_INTERVAL_MS = 5000;
 let rescan;
+
+const onChange = () => {
+  Window.event("evt/pc/list/change", Browser.list())
+}
+
 
 export const Browser = {
   shutdown: () => {
@@ -18,13 +25,22 @@ export const Browser = {
       socket.disconnect();
     }
     activeConnections.clear();
+    onChange();
+  },
+
+  list: () => {
+    const result = []
+    for (const key of activeConnections.keys()) {
+      result.push(key)
+    }
+    return result
   },
 
   init: () => {
     browser = bonjour.find({ type: "tpc-client", protocol: "tcp" });
 
     browser.on("up", (service) => {
-      const serviceKey = service.fqdn || service.name;
+      const serviceKey = service.name || service.fqdn;
 
       // Check if we already have an ACTIVE connection to this specific port
       const existing = activeConnections.get(serviceKey);
@@ -37,6 +53,7 @@ export const Browser = {
         existing.socket.removeAllListeners();
         existing.socket.disconnect();
         activeConnections.delete(serviceKey);
+        onChange()
       }
 
       const hostIp = service.addresses?.find((addr) => addr.includes(".")) || service.referer?.address;
@@ -51,7 +68,18 @@ export const Browser = {
       });
 
       // Track connection along with the current port number
-      activeConnections.set(serviceKey, { socket, port: service.port });
+      const connection = { socket, port: service.port }
+      activeConnections.set(serviceKey, connection);
+      onChange()
+
+      socket.onAny((event, ...args) => {
+        Window.event(
+          "evt/pc/one/" + serviceKey,
+          {
+            event,
+            data: args[0],
+          })
+      });
 
       socket.on("connect", () => {
         console.log(`[Connected] Joined ${service.name} on port ${service.port} (${socket.id})`);
@@ -59,10 +87,11 @@ export const Browser = {
 
       socket.on("disconnect", (reason) => {
         console.log(`[Disconnected] ${service.name} (port ${service.port}) lost: ${reason}`);
-        
+
         // Clean up socket listener and delete connection map entry
         socket.removeAllListeners();
         activeConnections.delete(serviceKey);
+        onChange()
 
         // Force purge from Bonjour browser cache so mDNS can re-trigger 'up' when the server gets its new port
         if (browser?.services) {
@@ -91,7 +120,6 @@ export const Browser = {
   },
 
   emit: (serviceKey, eventName, data) => {
-    // Fixed: Use Map.get() instead of object accessor []
     const connection = activeConnections.get(serviceKey);
     if (connection?.socket?.connected) {
       connection.socket.emit(eventName, data);
