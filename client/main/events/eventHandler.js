@@ -1,6 +1,6 @@
-import { Apps } from "../main/apps.js"
-import { Window } from "../main/window.js"
-import { reboot } from "./reboot.js"
+import { Apps } from "../utils/apps.js"
+import { Window } from "../window.js"
+import { reboot, shutdown } from "../utils/power.js"
 
 export const eventHandler = (socket, event, ...args) => {
     if (event === "unlock") {
@@ -18,6 +18,11 @@ export const eventHandler = (socket, event, ...args) => {
 
     if (event === "reboot") {
         reboot()
+        return
+    }
+    
+    if (event === "shutdown") {
+        shutdown()
         return
     }
 

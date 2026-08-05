@@ -2,7 +2,7 @@ import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { Bonjour } from "bonjour-service";
 import { Window } from "./window.js";
-import { eventHandler } from "../events/eventHandler.js";
+import { eventHandler } from "./events/eventHandler.js";
 
 const SERVER_NAME = process.env.TPC_CLIENT_NAME || `tpc-client-${Date.now()}`;
 

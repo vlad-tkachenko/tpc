@@ -1,5 +1,17 @@
 import { EventListeners } from "../utils/EventListeners";
 
+export enum PCRequestType {
+    lock = "lock",
+    unlock = "unlock",
+    reboot = "reboot",
+    shutdown = "shutdown",
+    apps_list = "apps/list"
+}
+
+export enum SelfRequestType {
+    all_list = "all/list"
+}
+
 interface ResponseMessage {
     id: number;
     ok: boolean;
@@ -11,10 +23,11 @@ interface ResponseMessage {
 let lastMessageId = Date.now()
 const responseListeners = new EventListeners<ResponseMessage>();
 
-const send = async (type: string, data?: any): Promise<any> => {
+const send = async (target: 'self' | 'all' | 'one', type: string, data?: any): Promise<any> => {
     const id = lastMessageId++;
 
     (window as any).electronAPI.sendMessage({
+        target,
         type,
         data,
         id,
@@ -62,19 +75,25 @@ export const API = {
         }
     },
 
+    self: {
+        list: async (): Promise<string[]> => send("self", SelfRequestType.all_list),
+    },
+
     one: {
-        lock: async (pc: string) => send("pc/one/lock", { pc }),
-        unlock: async (pc: string) => send("pc/one/unlock", { pc }),
-        reboot: async (pc: string) => send("pc/one/reboot", { pc }),
+        lock: async (pc: string) => send("one", PCRequestType.lock, { pc }),
+        unlock: async (pc: string) => send("one", PCRequestType.unlock, { pc }),
+        reboot: async (pc: string) => send("one", PCRequestType.reboot, { pc }),
+        shutdown: async (pc: string) => send("one", PCRequestType.shutdown, { pc }),
+
         apps: {
-            list: async (pc: string) => send("pc/one/apps/list", { pc }),
+            list: async (pc: string) => send("one", PCRequestType.apps_list, { pc }),
         }
     },
 
     all: {
-        list: async (): Promise<string[]> => send("pc/all/list"),
-        lock: async () => send("pc/all/lock"),
-        unlock: async () => send("pc/all/unlock"),
-        reboot: async () => send("pc/all/reboot"),
-    }
+        lock: async () => send("all", PCRequestType.lock),
+        unlock: async () => send("all", PCRequestType.unlock),
+        reboot: async () => send("all", PCRequestType.reboot),
+        shutdown: async () => send("all", PCRequestType.shutdown),
+    },
 }

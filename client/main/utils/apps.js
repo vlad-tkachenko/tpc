@@ -1,23 +1,6 @@
+import { execFile } from 'child_process';
 import { getInstalledApps } from 'get-installed-apps';
-import { exec, execFile } from 'child_process';
-
-const exec_async = async (cmd) => {
-    await new Promise((res, rej) => {
-        exec(cmd, (error, stdout, stderr) => {
-            if (error) {
-                rej(error);
-                return;
-            }
-
-            if (stderr) {
-                console.warn(`Stderr output: ${stderr}`);
-            }
-
-            console.log(`Stdout:\n${stdout}`);
-            res()
-        });
-    })
-}
+import { execAsync } from './exec.js';
 
 export const Apps = {
     uninstallAppByName: async (appName) => {
@@ -56,7 +39,7 @@ export const Apps = {
 
     quietUninstall: async (str) => {
         console.log(`Executing quiet uninstall...`);
-        await exec_async(str)
+        await execAsync(str)
         console.log(`App uninstalled`)
     },
 

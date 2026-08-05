@@ -45,9 +45,12 @@ export const PCAppsList = (props: { pc: string }) => {
         }
     }, [setList, pc])
 
-    return <ListGroup className='mt-4'>
-        {list.map((l, i) => <RenderAppItem key={`${i}-${l.app}`} pc={pc} app={l} />)}
-    </ListGroup>
+    return <>
+        <h4 className='my-4'>Apps:</h4>
+        <ListGroup className='mt-4'>
+            {list.map((l, i) => <RenderAppItem key={`${i}-${l.app}`} pc={pc} app={l} />)}
+        </ListGroup>
+    </>
 }
 
 const RenderAppItem = ({ pc, app }: { pc: string, app: App }) => {

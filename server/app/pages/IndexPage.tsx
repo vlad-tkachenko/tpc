@@ -8,11 +8,16 @@ import { API } from '../api/api';
 import { AsyncButton } from '../components/AsyncButton';
 import { useNavigate } from '../nav';
 
+import { BsBootstrapReboot } from "react-icons/bs";
+import { RiShutDownLine } from "react-icons/ri";
+import { IoReloadOutline } from "react-icons/io5";
+import { FiLock, FiUnlock } from "react-icons/fi";
+
 export const IndexPage = () => {
     const [list, setList] = useState<string[]>([])
 
     const refresh = useCallback(async () => {
-        const list = await API.all.list()
+        const list = await API.self.list()
         setList(list)
     }, [setList])
 
@@ -36,10 +41,32 @@ export const IndexPage = () => {
 
     return <Container className={"my-3"}>
         <Stack direction="horizontal" gap={3}>
-            <AsyncButton variant="danger" onClick={API.all.lock} toast={"All PCs are now locked"}>Lock</AsyncButton>
-            <AsyncButton variant="warning" onClick={API.all.unlock} toast={"All PCs are now unlocked"}>Unlock</AsyncButton>
-            <AsyncButton variant="danger" onClick={API.all.reboot} toast={"All PCs are now rebooting"}>Reboot</AsyncButton>
-            <AsyncButton variant="primary" onClick={refresh} toast={"List refreshed"}>Refresh</AsyncButton>
+            <Stack direction="horizontal" gap={3} className="me-auto">
+                <AsyncButton variant="light" onClick={API.all.lock} toast={"All PCs are now locked"} confirm>
+                    <FiLock />
+                    <span>Lock</span>
+                </AsyncButton>
+                <AsyncButton variant="secondary" onClick={API.all.unlock} toast={"All PCs are now unlocked"} confirm>
+                    <FiUnlock />
+                    <span>Unlock</span>
+                </AsyncButton>
+            </Stack>
+
+            <Stack direction="horizontal" gap={3} className="me-auto">
+                <AsyncButton variant="warning" onClick={API.all.reboot} toast={"All PCs are now rebooting"} confirm>
+                    <BsBootstrapReboot />
+                    <span>Reboot</span>
+                </AsyncButton>
+                <AsyncButton variant="danger" onClick={API.all.shutdown} toast={"All PCs are now shutting down"} confirm>
+                    <RiShutDownLine />
+                    <span>Shutdown</span>
+                </AsyncButton>
+            </Stack>
+            
+            <AsyncButton variant="primary" onClick={refresh} toast={"List refreshed"}>
+                <IoReloadOutline />
+                <span>Reload</span>
+            </AsyncButton>
         </Stack>
 
         <ListGroup className='mt-4'>
