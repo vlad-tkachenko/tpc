@@ -8,6 +8,13 @@ export const windowMessageHandler = (msg) => {
     if (msg.target === 'self') {
         if (msg.type === 'all/list') {
             Window.send.ok(msg.id, Browser.list())
+            Window.send.ok(msg.id)
+            return
+        }
+       
+        if (msg.type === 'debug') {
+            Window.openDevTools()
+            Window.send.ok(msg.id)
             return
         }
 

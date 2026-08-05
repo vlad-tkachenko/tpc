@@ -9,7 +9,8 @@ export enum PCRequestType {
 }
 
 export enum SelfRequestType {
-    all_list = "all/list"
+    all_list = "all/list",
+    debug = "debug",
 }
 
 interface ResponseMessage {
@@ -77,6 +78,7 @@ export const API = {
 
     self: {
         list: async (): Promise<string[]> => send("self", SelfRequestType.all_list),
+        debug: async () => send("self", SelfRequestType.debug),
     },
 
     one: {

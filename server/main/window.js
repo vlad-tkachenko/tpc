@@ -18,6 +18,10 @@ export const Window = {
         });
     },
 
+    openDevTools: () => {
+        w?.webContents.openDevTools();
+    },
+
     send: {
         error: (id, error) => {
             w?.webContents.send('from-main', {
@@ -49,7 +53,6 @@ export const Window = {
 
         if (process.env.NODE_ENV === 'development') {
             w.loadURL('http://localhost:5173');
-            w.webContents.openDevTools();
         } else {
             w.loadFile(path.join(__dirname, 'dist/index.html'));
         }
@@ -61,8 +64,6 @@ export const Window = {
         ipcMain.on('from-main', (event, msg) => {
             w.webContents.send('from-main', arg);
         })
-
-        w.webContents.openDevTools();
 
         return w
     }
