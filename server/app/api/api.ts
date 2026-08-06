@@ -3,9 +3,11 @@ import { EventListeners } from "../utils/EventListeners";
 export enum PCRequestType {
     lock = "lock",
     unlock = "unlock",
+    registration = "registration",
     reboot = "reboot",
     shutdown = "shutdown",
-    apps_list = "apps/list"
+    apps_list = "apps/list",
+    apps_uninstall = "apps/uninstall"
 }
 
 export enum SelfRequestType {
@@ -68,6 +70,19 @@ export const API = {
         responseListeners.add(subscriber)
     },
 
+    subscribeToAll: (listener: (data: {
+        type: string,
+        data: any,
+    }) => void) => {
+        const subscriber = (evt: ResponseMessage) => {
+            if (evt.type) {
+                listener({ type: evt.type, data: evt.data })
+            }
+        }
+        subscribers.set(listener, subscriber)
+        responseListeners.add(subscriber)
+    },
+
     unsubscribe: (listener: (data: any) => void) => {
         const subscriber = subscribers.get(listener)
         if (subscriber) {
@@ -86,9 +101,11 @@ export const API = {
         unlock: async (pc: string) => send("one", PCRequestType.unlock, { pc }),
         reboot: async (pc: string) => send("one", PCRequestType.reboot, { pc }),
         shutdown: async (pc: string) => send("one", PCRequestType.shutdown, { pc }),
+        registration: async (pc: string) => send("one", PCRequestType.registration, { pc }),
 
         apps: {
             list: async (pc: string) => send("one", PCRequestType.apps_list, { pc }),
+            uninstall: async (pc: string, app: string) => send("one", PCRequestType.apps_uninstall, { pc, app }),
         }
     },
 
@@ -97,5 +114,6 @@ export const API = {
         unlock: async () => send("all", PCRequestType.unlock),
         reboot: async () => send("all", PCRequestType.reboot),
         shutdown: async () => send("all", PCRequestType.shutdown),
+        registration: async () => send("all", PCRequestType.registration),
     },
 }

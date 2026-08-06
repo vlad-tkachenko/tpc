@@ -1,7 +1,7 @@
 import { Bonjour } from "bonjour-service";
 import { io } from "socket.io-client";
+import { eventHandler } from "./events/index.js";
 import { Window } from "./window.js";
-import { EventListeners } from "./EventListeners.js";
 
 const bonjour = new Bonjour();
 // Stores { serviceKey: { socket, service } }
@@ -73,12 +73,7 @@ export const Browser = {
       onChange()
 
       socket.onAny((event, ...args) => {
-        Window.event(
-          "evt/pc/one/" + serviceKey,
-          {
-            event,
-            data: args[0],
-          })
+        eventHandler(serviceKey, event, args[0])
       });
 
       socket.on("connect", () => {
@@ -122,6 +117,7 @@ export const Browser = {
   emit: (serviceKey, eventName, data) => {
     const connection = activeConnections.get(serviceKey);
     if (connection?.socket?.connected) {
+      console.log(`[${serviceKey}] Emitting ${eventName} with data:`, data)
       connection.socket.emit(eventName, data);
     }
   },

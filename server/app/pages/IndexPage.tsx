@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
-import { ListGroupItem } from 'react-bootstrap';
+import { Badge, Col, ListGroupItem, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Stack from 'react-bootstrap/Stack';
@@ -12,9 +12,12 @@ import { BsBootstrapReboot } from "react-icons/bs";
 import { RiShutDownLine } from "react-icons/ri";
 import { IoReloadOutline } from "react-icons/io5";
 import { FiLock, FiUnlock } from "react-icons/fi";
+import { PiSignInBold } from "react-icons/pi";
+import { useStorageContext } from '../storage';
 
 export const IndexPage = () => {
     const [list, setList] = useState<string[]>([])
+    const { clearRegistrations } = useStorageContext();
 
     const refresh = useCallback(async () => {
         const list = await API.self.list()
@@ -24,6 +27,11 @@ export const IndexPage = () => {
     useEffect(() => {
         refresh()
     }, [refresh])
+
+    const registration = useCallback(async () => {
+        clearRegistrations()
+        await API.all.registration();
+    }, [clearRegistrations])
 
     useEffect(() => {
         const type = "evt/pc/list/change";
@@ -42,6 +50,10 @@ export const IndexPage = () => {
     return <Container className={"my-3"}>
         <Stack direction="horizontal" gap={3}>
             <Stack direction="horizontal" gap={3} className="me-auto">
+                <AsyncButton variant="info" onClick={registration} toast={"All PCs are now awaiting registration"} confirm>
+                    <PiSignInBold />
+                    <span>Registration</span>
+                </AsyncButton>
                 <AsyncButton variant="light" onClick={API.all.lock} toast={"All PCs are now locked"} confirm>
                     <FiLock />
                     <span>Lock</span>
@@ -62,10 +74,10 @@ export const IndexPage = () => {
                     <span>Shutdown</span>
                 </AsyncButton>
             </Stack>
-            
+
             <AsyncButton variant="primary" onClick={refresh} toast={"List refreshed"}>
                 <IoReloadOutline />
-                <span>Reload</span>
+                <span>Refresh</span>
             </AsyncButton>
         </Stack>
 
@@ -77,10 +89,26 @@ export const IndexPage = () => {
 
 const RenderPCItem = ({ pc }: { pc: string }) => {
     const navigate = useNavigate();
+    const { registrations } = useStorageContext();
+    const registrationRecord = registrations[pc]
 
     const openPCPage = useCallback(() => {
         navigate("/pc", { pc })
     }, [pc, navigate])
 
-    return <ListGroupItem action onClick={openPCPage}>{pc}</ListGroupItem>
+    return <ListGroupItem action onClick={openPCPage}>
+        <Row>
+            <Col className='me-auto'>
+                <Badge bg="primary" className={"mx-2"}>{pc}</Badge>
+            </Col>
+            {registrationRecord ?
+                <Col>
+                    <Badge bg="success">{registrationRecord.class}</Badge>
+                    {registrationRecord.users.map((u, i) => {
+                        return <Badge bg="secondary" className={"ms-2"} key={`${i}-${u.firstName}-${u.firstName}`}>{u.lastName} {u.firstName}</Badge >
+                    })}
+                </Col>
+                : null}
+        </Row>
+    </ListGroupItem>
 }

@@ -5,17 +5,20 @@ import { Layout } from "./layout";
 import { NavProvider } from './nav';
 import { Content } from './content';
 import { ToastsProvider } from './components/Toasts';
+import { StorageProvider } from './storage';
 
 export default function App() {
   return (
     <ThemeProvider>
-      <ToastsProvider>
-        <NavProvider>
-          <Layout>
-            <Content />
-          </Layout>
-        </NavProvider>
-      </ToastsProvider>
+      <StorageProvider>
+        <ToastsProvider>
+          <NavProvider>
+            <Layout>
+              <Content />
+            </Layout>
+          </NavProvider>
+        </ToastsProvider>
+      </StorageProvider>
     </ThemeProvider>
   )
 }

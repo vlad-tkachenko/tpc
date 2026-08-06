@@ -1,6 +1,7 @@
-import { BrowserWindow, ipcMain, dialog } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { windowMessageHandler } from './window-messages/index.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -41,7 +42,7 @@ export const Window = {
         }
 
         ipcMain.on('to-main', (event, arg) => {
-            w.webContents.send('from-main', arg);
+            windowMessageHandler(arg);
         });
 
         w.once('ready-to-show', () => {

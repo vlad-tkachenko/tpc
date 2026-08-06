@@ -13,15 +13,27 @@ const io = new SocketIOServer(httpServer, {
 
 const bonjour = new Bonjour();
 
+let s;
+
 io.on("connection", (socket) => {
     console.log(`[${SERVER_NAME}] Client connected: ${socket.id}`);
+    s = socket
 
     socket.onAny((event, ...args) => {
-        eventHandler(socket, event, ...args)
+        eventHandler(socket, event, ...args).catch(e => {
+            console.error('Failed to process event. Error:', e)
+        })
     });
 });
 
 export const Server = {
+    emit: (evt, data) => {
+        try {
+            s?.emit(evt, data);
+        } catch (e) {
+            console.error("Unable to emit event")
+        }
+    },
     connect: () => {
         httpServer.listen(0, () => {
             const { port } = httpServer.address();

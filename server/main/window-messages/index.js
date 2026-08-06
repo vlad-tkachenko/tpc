@@ -29,8 +29,8 @@ export const windowMessageHandler = (msg) => {
     }
 
     if (msg.target === 'one') {
-        Browser.emit(msg.data.pc, msg.type)
-         Window.send.ok(msg.id)
+        Browser.emit(msg.data.pc, msg.type, msg.data)
+        Window.send.ok(msg.id)
         return
     }
 

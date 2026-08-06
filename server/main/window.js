@@ -62,7 +62,7 @@ export const Window = {
         });
 
         ipcMain.on('from-main', (event, msg) => {
-            w.webContents.send('from-main', arg);
+            w.webContents.send('from-main', msg);
         })
 
         return w
