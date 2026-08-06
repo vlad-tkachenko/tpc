@@ -23,7 +23,7 @@ export const windowMessageHandler = (msg) => {
     }
 
     if (msg.target === 'all') {
-        Browser.emitAll(msg.type)
+        Browser.emitAll(msg.type, msg.data)
         Window.send.ok(msg.id)
         return
     }

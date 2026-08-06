@@ -8,16 +8,19 @@ import { API } from '../api/api';
 import { AsyncButton } from '../components/AsyncButton';
 import { useNavigate } from '../nav';
 
-import { BsBootstrapReboot } from "react-icons/bs";
+import { BsBootstrapReboot, BsLink } from "react-icons/bs";
 import { RiShutDownLine } from "react-icons/ri";
 import { IoReloadOutline } from "react-icons/io5";
 import { FiLock, FiUnlock } from "react-icons/fi";
 import { PiSignInBold } from "react-icons/pi";
 import { useStorageContext } from '../storage';
+import { OpenURLDialog } from '../components/OpenURLDialog';
+import { useDiscosure } from '../components/useDisclosure';
 
 export const IndexPage = () => {
     const [list, setList] = useState<string[]>([])
     const { clearRegistrations } = useStorageContext();
+    const { show: showOpenURLDialog, onOpen: onOpenOpenURLDialog, onClose: onCloseOpenURLDialog } = useDiscosure();
 
     const refresh = useCallback(async () => {
         const list = await API.self.list()
@@ -46,6 +49,10 @@ export const IndexPage = () => {
         }
     }, [setList])
 
+    const openURL = useCallback((url: string) => {
+        onCloseOpenURLDialog();
+        API.all.open(url)
+    }, [onCloseOpenURLDialog])
 
     return <Container className={"my-3"}>
         <Stack direction="horizontal" gap={3}>
@@ -62,6 +69,14 @@ export const IndexPage = () => {
                     <FiUnlock />
                     <span>Unlock</span>
                 </AsyncButton>
+            </Stack>
+
+            <Stack direction="horizontal" gap={3} className="me-auto">
+                <AsyncButton variant="info" onClick={onOpenOpenURLDialog}>
+                    <BsLink />
+                    <span>Open URL</span>
+                </AsyncButton>
+                <OpenURLDialog show={showOpenURLDialog} onCancel={onCloseOpenURLDialog} onSubmit={openURL} />
             </Stack>
 
             <Stack direction="horizontal" gap={3} className="me-auto">

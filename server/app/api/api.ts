@@ -3,6 +3,7 @@ import { EventListeners } from "../utils/EventListeners";
 export enum PCRequestType {
     lock = "lock",
     unlock = "unlock",
+    open = "open",
     registration = "registration",
     reboot = "reboot",
     shutdown = "shutdown",
@@ -97,6 +98,7 @@ export const API = {
     },
 
     one: {
+        open: async (pc: string, url: string) => send("one", PCRequestType.open, { pc, url }),
         lock: async (pc: string) => send("one", PCRequestType.lock, { pc }),
         unlock: async (pc: string) => send("one", PCRequestType.unlock, { pc }),
         reboot: async (pc: string) => send("one", PCRequestType.reboot, { pc }),
@@ -110,6 +112,7 @@ export const API = {
     },
 
     all: {
+        open: async (url: string) => send("all", PCRequestType.open, { url }),
         lock: async () => send("all", PCRequestType.lock),
         unlock: async () => send("all", PCRequestType.unlock),
         reboot: async () => send("all", PCRequestType.reboot),
