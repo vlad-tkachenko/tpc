@@ -1,6 +1,7 @@
 import { Apps } from "../utils/apps.js"
 import { Window } from "../window.js"
 import { reboot, shutdown } from "../utils/power.js"
+import { shell } from 'electron';
 
 export const eventHandler = async (socket, event, ...args) => {
     if (event === "unlock") {
@@ -31,6 +32,13 @@ export const eventHandler = async (socket, event, ...args) => {
 
     if (event === "shutdown") {
         shutdown()
+        return
+    }
+
+    if (event === "open") {
+        const url = args[0].url
+        console.log(`Openning ${url}`)
+        shell.openExternal(url);
         return
     }
 
