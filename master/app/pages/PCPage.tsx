@@ -8,7 +8,7 @@ import { PCAppsList } from './pc/PCAppsList';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-import { BsBootstrapReboot } from "react-icons/bs";
+import { BsBootstrapReboot, BsLink } from "react-icons/bs";
 import { RiShutDownLine } from "react-icons/ri";
 import { IoReloadOutline } from "react-icons/io5";
 import { FiLock, FiUnlock } from "react-icons/fi";
@@ -16,11 +16,14 @@ import { useNavigate } from '../nav';
 import { PiSignInBold } from 'react-icons/pi';
 import { useStorageContext } from '../storage';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
+import { useDiscosure } from '../components/useDisclosure';
+import { OpenURLDialog } from '../components/OpenURLDialog';
 
 export const PCPage = (props: { pc: string }) => {
     const { pc } = props;
     const { clearRegistration } = useStorageContext()
     const navigate = useNavigate();
+    const { show: showOpenURLDialog, onOpen: onOpenOpenURLDialog, onClose: onCloseOpenURLDialog } = useDiscosure();
 
     const { registrations } = useStorageContext();
     const registrationRecord = registrations[pc]
@@ -66,6 +69,11 @@ export const PCPage = (props: { pc: string }) => {
         }
     }, [pc, navigate])
 
+    const openURL = useCallback((url: string) => {
+        onCloseOpenURLDialog();
+        API.one.open(pc, url)
+    }, [pc, onCloseOpenURLDialog])
+
     return <Container className={"my-3"}>
         <Button variant='link' onClick={back}>&lt; Back</Button>
         <h1 className='mb-4'>{pc}</h1>
@@ -93,6 +101,14 @@ export const PCPage = (props: { pc: string }) => {
                     <FiUnlock />
                     <span>Unlock</span>
                 </AsyncButton>
+            </Stack>
+
+            <Stack direction="horizontal" gap={3} className="me-auto">
+                <AsyncButton variant="info" onClick={onOpenOpenURLDialog}>
+                    <BsLink />
+                    <span>Open URL</span>
+                </AsyncButton>
+                <OpenURLDialog show={showOpenURLDialog} onCancel={onCloseOpenURLDialog} onSubmit={openURL} />
             </Stack>
 
             <Stack direction="horizontal" gap={3}>
