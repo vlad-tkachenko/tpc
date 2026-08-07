@@ -56,9 +56,7 @@ export const eventHandler = async (socket, event, ...args) => {
         let installed = await Apps.getInstalled();
         const cfg = installed.find(i => i.app === app);
         if (cfg?.uninstall.automatic) {
-            console.log(cfg);
             await Apps.quietUninstall(cfg.uninstall.automatic)
-
             installed = await Apps.getInstalled()
             socket.emit("apps/list", installed)
         } else {

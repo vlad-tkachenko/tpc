@@ -1,6 +1,5 @@
 import { execFile } from 'child_process';
 import { getInstalledApps } from 'get-installed-apps';
-import { execAsync } from './exec.js';
 
 export const Apps = {
     uninstallAppByName: async (appName) => {
@@ -37,10 +36,23 @@ export const Apps = {
         console.log(`${appName} uninstalled`)
     },
 
-    quietUninstall: async (str) => {
+    quietUninstall: async (cmd) => {
         console.log(`Executing quiet uninstall...`);
-        await execAsync(str)
-        console.log(`App uninstalled`)
+        const resp = await fetch("http://localhost:23473/exec", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                cmd,
+            })
+        })
+
+        if (resp.ok) {
+            console.log(`App uninstalled`)
+        } else {
+            console.error(`Failed to uninstall app`)
+        }
     },
 
     getInstalled: async () => {
