@@ -1,17 +1,12 @@
-const Service = require('node-windows').Service;
+import { Service } from 'node-windows';
 
 const svc = new Service({
   name: 'TPC-Agent',
   description: 'TPC-Agent',
   
-  // Point script to package.json so node-windows validates the path
-  script: 'C:\\tpc\\agent\\package.json', 
+  script: 'C:\\tpc\\agent\\index.js',   
+  execPath: 'C:\\tpc\\agent\\node_modules\\electron\\dist\\electron.exe',
   
-  execPath: 'C:\\Tools\\Bun\\bin\\bun.exe',
-  
-  // Passes "bun run start" to package.json directory
-  scriptOptions: ['run', 'start'], 
-
   workingDirectory: 'C:\\tpc\\agent',
   wait: 2,
   grow: 0.25,
