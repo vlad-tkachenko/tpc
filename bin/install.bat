@@ -21,5 +21,9 @@ echo === Setting up PM2 Windows Service ===
 call pm2-service-install -n PM2_Service
 
 echo.
+echo === Installing Privileged Service ===
+powershell -ExecutionPolicy Bypass -File "C:\tpc\privileged\install.ps1"
+
+echo.
 echo === Setup Complete! ===
 pause

@@ -1,28 +1,12 @@
 # 
 
-## TPC - Client
+- Download archive from https://github.com/vlad-tkachenko/tpc/archive/refs/heads/master.zip
+- Unpack it to C:/tpc
 
-### PM2
+- Open privileged Terminal
+- `cd C:/tpc`
+- Run install.bat
 
-
-- Open Command Prompt as Administrator.
-- Run:
-
-```bash
-setx TPC_CLIENT_NAME "PC-1" /M
-```
-
-
-```bash
-cd tpc/client
-pm2 start ecosystem.config.js
-pm2 save
-```
-
-- Press Win + R, type `shell:startup`, and press Enter.
-- Create a batch file inside this folder named `pm2-autostart.bat`
-
-```
-@echo off
-pm2 resurrect
-```
+- Open regular Terminal
+- `cd C:/tpc/agent`
+- Run `powershell -ExecutionPolicy Bypass -File "C:\tpc\agent\install.ps1"`
