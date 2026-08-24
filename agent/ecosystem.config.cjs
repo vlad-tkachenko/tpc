@@ -9,7 +9,8 @@ export default {
       // Ensure working directory is set to your project root
       cwd: "C:/tpc/agent",
       autorestart: true,
-      interpreter: "bun",
+      interpreter: "C:/Tools/Bun/bin/bun.exe",
+      interpreter_args: "run",
       env: {
       }
     }
