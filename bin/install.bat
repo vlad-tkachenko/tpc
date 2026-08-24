@@ -13,11 +13,11 @@ powershell -Command "$env:BUN_INSTALL='C:\Tools\Bun'; irm bun.sh/install.ps1 | i
 
 echo.
 echo === Installing PM2 Packages ===
-call npm install -g pm2 pm2-service-install
+call npm install -g pm2 pm2-windows-service
 
 echo.
 echo === Setting up PM2 Windows Service ===
-:: Note: pm2-service-install will open interactive prompts to set PM2_HOME
+call npm install -g pm2 pm2-windows-service
 call pm2-service-install -n PM2_Service
 
 echo.

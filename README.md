@@ -4,7 +4,7 @@
 - Unpack it to C:/tpc
 
 - Open privileged Terminal
-- `cd C:/tpc`
+- `cd C:/tpc/bin`
 - Run install.bat
 
 - Open regular Terminal
