@@ -1,3 +1,4 @@
+$env:PM2_HOME = "$env:USERPROFILE\.pm2-user"
 [System.Environment]::SetEnvironmentVariable("PM2_HOME", "$env:USERPROFILE\.pm2-user", "User")
 
 # Start your service application

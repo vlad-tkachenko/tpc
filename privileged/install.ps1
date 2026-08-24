@@ -1,3 +1,4 @@
+$env:PM2_HOME = "C:\ProgramData\pm2-admin"
 [System.Environment]::SetEnvironmentVariable("PM2_HOME", "C:\ProgramData\pm2-admin", "Machine")
 
 # Start your service application
