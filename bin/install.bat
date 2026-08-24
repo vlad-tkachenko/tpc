@@ -1,4 +1,8 @@
 @echo off
+
+powershell -ExecutionPolicy Bypass -File "C:\tpc\bin\redist.ps1"
+
+echo.
 echo === Installing Node.js LTS ===
 winget install -e --id OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
 
@@ -12,13 +16,9 @@ echo === Installing Bun to C:\Tools\Bun ===
 powershell -Command "$env:BUN_INSTALL='C:\Tools\Bun'; irm bun.sh/install.ps1 | iex"
 
 echo.
-echo === Installing PM2 Packages ===
-call npm install -g pm2 pm2-windows-service
-
-echo.
-echo === Setting up PM2 Windows Service ===
-call npm install -g pm2 pm2-windows-service
-call pm2-service-install -n PM2_Service
+echo === Installing node-windows ===
+call npm install -g node-windows
+call npm link node-windows
 
 echo.
 echo === Installing Privileged Service ===
