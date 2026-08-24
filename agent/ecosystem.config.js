@@ -7,9 +7,9 @@ module.exports = {
       // Arguments passed to electron ('.' points to main.js / package.json)
       args: ".",
       // Ensure working directory is set to your project root
-      cwd: "./",
+      cwd: "C:/tpc/agent",
       autorestart: true,
-
+      interpreter: "bun",
       env: {
       }
     }
