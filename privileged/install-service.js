@@ -1,16 +1,13 @@
-const Service = require('node-windows').Service;
+import { Service } from 'node-windows';
 
 const svc = new Service({
   name: 'TPC-Privileged',
   description: 'TPC-Privileged',
-  
-  // Point script to package.json so node-windows validates the path
-  script: 'C:\\tpc\\privileged\\package.json', 
-  
+  script: 'C:\\tpc\\privileged\\index.js',   
   execPath: 'C:\\Tools\\Bun\\bin\\bun.exe',
   
   // Passes "bun run start" to package.json directory
-  scriptOptions: ['run', 'start'], 
+  scriptOptions: ['run'], 
 
   workingDirectory: 'C:\\tpc\\privileged',
   wait: 2,

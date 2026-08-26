@@ -18,7 +18,6 @@ powershell -Command "$env:BUN_INSTALL='C:\Tools\Bun'; irm bun.sh/install.ps1 | i
 echo.
 echo === Installing node-windows ===
 call npm install -g node-windows
-call npm link node-windows
 
 echo.
 echo === Installing Privileged Service ===
