@@ -1,5 +1,4 @@
 # Start your service application
 cd C:\tpc\agent
 C:\Tools\Bun\bin\bun.exe install
-npm link node-windows
-node install-service.js
+copy "tpc-agent-autorun.bat" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
